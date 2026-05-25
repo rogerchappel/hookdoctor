@@ -1,0 +1,1 @@
+[[ -f /Users/alex/.toolrc ]] && node scripts/check.js
