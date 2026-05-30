@@ -1,11 +1,15 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { chmod } from 'node:fs/promises';
+import { execFile } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { promisify } from 'node:util';
 
 import { formatReport, scanPath } from '../src/index.js';
+
+const execFileAsync = promisify(execFile);
 
 test('scanPath reports no findings for a safe executable hook', async () => {
   const repo = await createRepo('safe');
@@ -56,6 +60,22 @@ test('formatReport emits markdown', async () => {
 
   assert.match(markdown, /^# HookDoctor Report/);
   assert.match(markdown, /\| Severity \| Rule \| Source \| Path \| Message \|/);
+});
+
+test('CLI exits 2 and emits JSON for error-severity findings', async () => {
+  const repo = await createRepo('cli-danger');
+  await writeHook(repo, 'pre-commit', '#!/usr/bin/env bash\nrm -rf dist\n', 0o755);
+
+  await assert.rejects(
+    execFileAsync(process.execPath, ['src/cli.js', 'scan', repo, '--severity', 'error'], { cwd: process.cwd() }),
+    (error) => {
+      assert.equal(error.code, 2);
+      const parsed = JSON.parse(error.stdout);
+      assert.equal(parsed.summary.error, 1);
+      assert.equal(parsed.findings[0].rule, 'destructive-command');
+      return true;
+    }
+  );
 });
 
 async function createRepo(name) {
