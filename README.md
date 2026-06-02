@@ -70,6 +70,15 @@ node src/cli.js scan fixtures/warn --format markdown --severity warn
 node src/cli.js scan fixtures/high-risk --severity error
 ```
 
+Run the guided fixture demo:
+
+```sh
+bash examples/demo-hook-audit.sh
+```
+
+See [Audit risky pre-commit hooks before sharing a repo](docs/tutorials/pre-commit-hook-audit.md)
+for a CI-oriented walkthrough.
+
 ## Verify
 
 Run the local validation script before opening a pull request:
