@@ -13,12 +13,16 @@
   "files": [
     "src",
     "fixtures",
-    "README.md"
+    "README.md",
+    "LICENSE",
+    "SECURITY.md"
   ],
   "scripts": {
     "test": "node --test",
     "package:smoke": "npm pack --dry-run",
-    "release:check": "npm test && npm run package:smoke"
+    "release:check": "npm test && npm run build && npm run smoke && npm run package:smoke",
+    "build": "node --check src/cli.js && node --check src/index.js",
+    "smoke": "node src/cli.js scan fixtures/warn --format json >/tmp/hookdoctor-smoke.json"
   },
   "keywords": [
     "git-hooks",
@@ -26,6 +30,14 @@
     "ci",
     "lint"
   ],
-  "author": "",
-  "license": "MIT"
+  "author": "Roger Chappel",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rogerchappel/hookdoctor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rogerchappel/hookdoctor/issues"
+  },
+  "homepage": "https://github.com/rogerchappel/hookdoctor#readme"
 }
