@@ -100,6 +100,14 @@ should be small, reviewable, and verified before review.
 
 See [SECURITY.md](SECURITY.md) for vulnerability reporting guidance.
 
+## Verification
+
+Use the package scripts as the public smoke gates before publishing or changing CLI behavior.
+
+- `npm run release:check`
+- `npm run test`
+- `npm run package:smoke`
+
 ## License
 
 MIT
