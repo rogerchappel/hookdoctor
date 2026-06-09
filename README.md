@@ -91,6 +91,20 @@ bash scripts/validate.sh
 defined and will also run `agent-qc ready` when `agent-qc` is installed. Missing
 `agent-qc` is treated as a skip, not a failure.
 
+## Development
+
+Use the same local checks that back release readiness:
+
+```bash
+npm test
+npm run build
+npm run smoke
+npm run package:smoke
+npm run release:check
+```
+
+Run the narrower commands while iterating, then finish with the broadest available check before opening a PR.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution expectations. Changes
