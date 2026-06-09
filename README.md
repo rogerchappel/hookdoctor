@@ -95,7 +95,7 @@ defined and will also run `agent-qc ready` when `agent-qc` is installed. Missing
 
 Use the same local checks that back release readiness:
 
-```bash
+```sh
 npm test
 npm run build
 npm run smoke
