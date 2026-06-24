@@ -13,6 +13,8 @@
   "files": [
     "src",
     "fixtures",
+    "examples",
+    "docs/tutorials",
     "README.md",
     "LICENSE",
     "SECURITY.md",

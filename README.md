@@ -120,7 +120,12 @@ Use the package scripts as the public smoke gates before publishing or changing 
 
 - `npm run release:check`
 - `npm run test`
+- `npm run smoke`
 - `npm run package:smoke`
+
+Run `npm run package:smoke` to confirm the published tarball includes the
+runnable CLI, fixtures, demo script, tutorial, README, license, security policy,
+and support docs referenced above.
 
 ## License
 
