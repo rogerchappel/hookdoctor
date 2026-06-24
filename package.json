@@ -23,7 +23,7 @@
   ],
   "scripts": {
     "test": "node --test",
-    "package:smoke": "npm pack --dry-run",
+    "package:smoke": "bash scripts/package-smoke.sh",
     "release:check": "npm test && npm run build && npm run smoke && npm run package:smoke",
     "build": "node --check src/cli.js && node --check src/index.js",
     "smoke": "node src/cli.js scan fixtures/warn --format json >/tmp/hookdoctor-smoke.json"
