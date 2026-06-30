@@ -1,5 +1,9 @@
 #!/usr/bin/env node
+import { createRequire } from 'node:module';
 import { scanPath, writeReport } from './index.js';
+
+const require = createRequire(import.meta.url);
+const { version } = require('../package.json');
 
 const usage = `Usage:
   hookdoctor scan [path] [--format json|markdown] [--severity info|warn|error] [--out file]
@@ -12,6 +16,11 @@ async function main(argv) {
   const [command] = argv;
   if (!command || command === '--help' || command === '-h') {
     process.stdout.write(`${usage}\n`);
+    return 0;
+  }
+
+  if (command === '--version' || command === '-v' || command === 'version') {
+    process.stdout.write(`${version}\n`);
     return 0;
   }
 
