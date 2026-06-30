@@ -21,6 +21,7 @@ Scan a repository and print JSON:
 
 ```sh
 npx hookdoctor scan .
+npx hookdoctor --version
 ```
 
 Scan a fixture and print Markdown:
@@ -126,7 +127,8 @@ Use the package scripts as the public smoke gates before publishing or changing 
 
 Run `npm run package:smoke` to confirm the published tarball includes the
 runnable CLI, fixtures, demo script, tutorial, README, license, security policy,
-and support docs referenced above.
+and support docs referenced above. It also installs the packed tarball in a
+temporary project and verifies the installed `hookdoctor` bin and public import.
 
 ## License
 
