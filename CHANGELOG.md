@@ -10,6 +10,8 @@ format and uses semantic versioning when versioned releases are published.
 ### Added
 
 - Initial project setup.
+- CLI `--version` output backed by package metadata.
+- Packed-package smoke coverage for installing the tarball, running the installed CLI, and importing the public API.
 
 ## Release Links
 
