@@ -133,3 +133,7 @@ temporary project and verifies the installed `hookdoctor` bin and public import.
 ## License
 
 MIT
+
+## Limitations
+
+hookdoctor is designed for local, read-only analysis. It reports evidence and suggested review points, but it does not prove a system is secure, complete, or production-ready by itself. Review generated output before using it in release, compliance, or incident workflows.
