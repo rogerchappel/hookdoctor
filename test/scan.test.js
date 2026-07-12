@@ -62,6 +62,13 @@ test('formatReport emits markdown', async () => {
   assert.match(markdown, /\| Severity \| Rule \| Source \| Path \| Message \|/);
 });
 
+test('CLI help exits cleanly with usage text', async () => {
+  const { stdout } = await execFileAsync(process.execPath, ['src/cli.js', '--help'], { cwd: process.cwd() });
+
+  assert.match(stdout, /Usage:/);
+  assert.match(stdout, /hookdoctor scan/);
+});
+
 test('CLI exits 2 and emits JSON for error-severity findings', async () => {
   const repo = await createRepo('cli-danger');
   await writeHook(repo, 'pre-commit', '#!/usr/bin/env bash\nrm -rf dist\n', 0o755);
