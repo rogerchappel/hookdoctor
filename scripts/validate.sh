@@ -53,6 +53,33 @@ package_script_exists() {
   node -e "const fs=require('node:fs'); const pkg=JSON.parse(fs.readFileSync('package.json','utf8')); process.exit(pkg.scripts && pkg.scripts[process.argv[1]] ? 0 : 1)" "$script_name"
 }
 
+validate_smoke_script() {
+  node --input-type=module <<'NODE'
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+
+const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+const smoke = pkg.scripts?.smoke;
+if (!smoke) throw new Error('package.json must define scripts.smoke');
+const match = smoke.match(/^node src\/cli\.js scan (\S+) --format json >\/tmp\/hookdoctor-smoke\.json$/);
+if (!match) throw new Error(`Unexpected smoke command: ${smoke}`);
+const output = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'hookdoctor-smoke-')), 'report.json');
+const command = smoke.replace('>/tmp/hookdoctor-smoke.json', `>${output}`);
+const result = spawnSync(command, { shell: true, encoding: 'utf8' });
+if (result.status !== 0) {
+  process.stderr.write(result.stderr || '');
+  throw new Error(`smoke command exited with status ${result.status}`);
+}
+const report = JSON.parse(fs.readFileSync(output, 'utf8'));
+if (!report || typeof report !== 'object' || !report.summary) {
+  throw new Error('smoke output is not a Hookdoctor JSON report');
+}
+console.log('smoke command succeeded and wrote valid JSON');
+NODE
+}
+
 choose_package_manager() {
   if [ -f "pnpm-lock.yaml" ] && command -v pnpm >/dev/null 2>&1; then
     printf 'pnpm\n'
@@ -140,6 +167,10 @@ printf '\nRunning local project checks where present...\n'
 if [ -f "package.json" ]; then
   if package_manager="$(choose_package_manager)"; then
     note "using package manager: $package_manager"
+
+    if package_script_exists "smoke"; then
+      run_check "smoke command succeeds and writes valid JSON" validate_smoke_script
+    fi
 
     for script_name in check lint test build release:check; do
       if package_script_exists "$script_name"; then
